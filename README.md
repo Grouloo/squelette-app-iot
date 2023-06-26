@@ -30,7 +30,7 @@ const firebaseConfig = {
 
 Dans le fichier `./firebase.json`, remplacez `"site": "hackathon"` par `"site": [NOM VOTRE PROJET FIREBASE]`.
 
-Dans le fichier `./.firebaserc`, remplacez `"default": "hackathon"` par `"default": [NOM VOTRE PROJET FIREBASE]` par le nom de votre project Firebase.
+Dans le fichier `./.firebaserc`, remplacez `"default": "hackathon"` par `"default": [NOM VOTRE PROJET FIREBASE]`.
 
 ## Lancer le projet
 
