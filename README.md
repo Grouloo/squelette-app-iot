@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# Squelette d'application web pour projet IoT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Squelette d'application à destination d'étudiants de Bac+3 permettant de créer une application web avec React et Firebase Realtime Database.
 
-In the project directory, you can run:
+## Pré-requis
 
-### `npm start`
+Pour utiliser ce projet, il vous faudra :
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Avoir installé [NodeJS](https://nodejs.org/en/download) sur votre machine
+- Avoir installé [le gestionnaire de paquets Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+- Un projet [Firebase](https://console.firebase.google.com/) avec Realtime Database configuré
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Configuration
 
-### `npm test`
+Avant toute chose, configurez le projet en ajoutant les identifiants de votre projet Firebase dans le fichier `./src/App.tsx`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```ts
+const firebaseConfig = {
+  apiKey: [Votre apiKey],
+  authDomain: [Votre authDomain],
+  databaseURL: [Votre databaseUrl],
+  projectId: [Votre projectId],
+  storageBucket: [Votre storageBucket],
+  messagingSenderId: [Votre messagingSenderId],
+  appId: [Votre appId],
+}
+```
 
-### `npm run build`
+Dans le fichier `./firebase.json`, remplacez `"site": "hackathon"` par `"site": [NOM VOTRE PROJET FIREBASE]`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Dans le fichier `./.firebaserc`, remplacez `"default": "hackathon"` par `"default": [NOM VOTRE PROJET FIREBASE]` par le nom de votre project Firebase.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Lancer le projet
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Il vous faudra tout d'abord installer les dépendances :
 
-### `npm run eject`
+```bash
+yarn
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Une fois ceci fait, vous pourrez simplement lancer le projet avec la commande :
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+yarn start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Lire et écrire sur la base de données
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Ce squelette d'application met à votre disposition deux fonctions.
 
-## Learn More
+### readRealtime
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Permet de lire une valeur dans la base de données.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```ts
+function readRealtime(path: string, action: (data: any) => void)
+```
 
-### Code Splitting
+À chaque fois que la valeur dans la base de données sera modifiée, la fonction `action` passée en argument sera exécutée à nouveau.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### Exemple
 
-### Analyzing the Bundle Size
+Dans l'exemple ci-dessous, `setData` sera ré-exécutée à chaque modification de la valeur de `foo` dans la base de données
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```ts
+const [data, setData] = useState()
 
-### Making a Progressive Web App
+useEffect(() => {
+  readRealtime("foo", setData)
+})
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### writeRealtime
 
-### Advanced Configuration
+Permet d'écrire une valeur dans la base de données.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```ts
+type Data = boolean | string | number | { [x: string]: unknown }
 
-### Deployment
+function writeRealtime(path: string, data: Data | Data[])
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+#### Exemple
 
-### `npm run build` fails to minify
+```ts
+writeRealtime("foo", "bar").then(() => console.log("all good"))
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Déployer le projet
+
+Pour déployer le projet sur Firebase Hosting, utilisez la commande
+
+```bash
+yarn deploy
+```
